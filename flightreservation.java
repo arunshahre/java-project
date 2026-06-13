@@ -1,13 +1,13 @@
+import java.util.Scanner;
 // Passenger.java
 class Passenger {
     private String name;
     private int id;
 
-    public Passenger(String name, int id) {
+    public Passenger(String name,int id){
         this.name = name;
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
@@ -19,22 +19,20 @@ class Passenger {
 class Flight {
     private final int MAX_SEATS;
     private Passenger[] seats;
+
     // Constructor
     public Flight(int capacity) {
         this.MAX_SEATS = capacity;
         seats = new Passenger[MAX_SEATS];
         System.out.println("Flight Created with " + MAX_SEATS + " seats.");
     }
-    // Method to book seat
     public boolean bookSeat(Passenger p) {
-        // Prevent duplicate booking
         for (Passenger seat : seats) {
             if (seat != null && seat.getId() == p.getId()) {
-                System.out.println("Booking failed! Passenger " + p.getName() + " already booked.");
+                System.out.println("Booking failed! Passenger "+p.getName()+"already booked.");
                 return false;
             }
         }
-        // Find first empty seat
         for (int i = 0; i < MAX_SEATS; i++) {
             if (seats[i] == null) {
                 seats[i] = p;
@@ -42,37 +40,49 @@ class Flight {
                 return true;
             }
         }
-        // If no seats available
-        System.out.println("Flight Full! Booking failed for Passenger: "+p.getName());
+        System.out.println("Flight Full! Booking failed for Passenger: " + p.getName());
         return false;
     }
+
     // Display seat status
     public void displaySeats() {
         System.out.println("\nSeat Status:");
-        for (int i=0;i<MAX_SEATS;i++) {
-            if (seats[i]!=null) {
-                System.out.println("Seat"+(i+1)+":"+seats[i].getName());
+        for (int i = 0; i < MAX_SEATS; i++) {
+            if (seats[i] != null) {
+                System.out.println("Seat " + (i + 1) + ": " + seats[i].getName());
             } else {
-                System.out.println("Seat "+(i+1)+":Empty");
+                System.out.println("Seat " + (i + 1) + ": Empty");
             }
         }
-      }
+    }
 }
+
+// Main class
 public class flightreservation {
     public static void main(String[] args) {
-        // Create flight with 5 seats
-        Flight flight = new Flight(5);
+        Scanner sc = new Scanner(System.in);
 
-        // Create passengers
-        Passenger p1 = new Passenger("Aman",101);
-        Passenger p2 = new Passenger("Rahul",102);
-        Passenger p3 = new Passenger("Riya",103);
+        System.out.print("Enter number of seats in flight: ");
+        int capacity = sc.nextInt();
+        Flight flight = new Flight(capacity);
 
-        // Book seats
-        flight.bookSeat(p1);
-        flight.bookSeat(p2);
-        flight.bookSeat(p3);
-        flight.bookSeat(p1);
+        // Input passengers
+        System.out.print("Enter number of passengers to book: ");
+        int numPassengers = sc.nextInt();
+        sc.nextLine();
+        for (int i = 0; i < numPassengers; i++) {
+            System.out.print("\nEnter Passenger Name: ");
+            String name = sc.nextLine();
+            System.out.print("Enter Passenger ID: ");
+            int id = sc.nextInt();
+            sc.nextLine();
+
+            Passenger p = new Passenger(name, id);
+            flight.bookSeat(p);
+        }
+
+        // Display final seat status
         flight.displaySeats();
+        sc.close();
     }
 }
